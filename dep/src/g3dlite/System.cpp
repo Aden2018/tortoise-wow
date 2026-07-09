@@ -1697,12 +1697,17 @@ std::string System::currentTimeString() {
 
 // Windows 64-bit
 void System::cpuid(CPUIDFunction func, uint32& eax, uint32& ebx, uint32& ecx, uint32& edx) {
-	int regs[4] = {eax, ebx, ecx, edx};
-	__cpuid(regs, func);
-	eax = regs[0];
-	ebx = regs[1];
-	ecx = regs[2];
-	edx = regs[3];
+    int regs[4] = {
+        static_cast<int>(eax),
+        static_cast<int>(ebx),
+        static_cast<int>(ecx),
+        static_cast<int>(edx)
+    };
+    __cpuid(regs, func);
+    eax = static_cast<uint32>(regs[0]);
+    ebx = static_cast<uint32>(regs[1]);
+    ecx = static_cast<uint32>(regs[2]);
+    edx = static_cast<uint32>(regs[3]);
 }
 
 #elif defined (__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_AMD64)
