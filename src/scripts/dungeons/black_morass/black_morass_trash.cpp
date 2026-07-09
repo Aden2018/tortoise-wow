@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2021-2022 Nolin (nolin.nolin.nolin.nolin@gmail.org)
  *
  * This is private software and may not be shared under any circumstances,
@@ -2328,7 +2328,7 @@ public:
                         }
                         case 3:
                         {
-                            pSummon->MonsterYell("OH MY GOD � IS THAT A DRAGON?? CALL THE GUARDS! HELP!!");
+                            pSummon->MonsterYell("OH MY GOD ! IS THAT A DRAGON?? CALL THE GUARDS! HELP!!");
                             pSummon->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
                             pSummon->GetMotionMaster()->MoveConfused();
                             pPortal = m_creature->SummonGameObject(nsLogisticalOfficer::GOB_PORTAL_STORMWIND, -8464.56f, -4222.97f, -214.35f, 0, 0, 0, 0, 0, 10000);

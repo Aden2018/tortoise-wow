@@ -1,4 +1,4 @@
-#include "scriptPCH.h"
+﻿#include "scriptPCH.h"
 #include "HardcodedEvents.h"
 #include <array>
 
