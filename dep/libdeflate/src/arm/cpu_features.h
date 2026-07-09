@@ -1,4 +1,4 @@
-/*
+﻿/*
  * arm/cpu_features.h - feature detection for ARM CPUs
  *
  * Copyright 2018 Eric Biggers
