@@ -376,6 +376,8 @@ enum eScriptCommand
     SCRIPT_COMMAND_START_SCRIPT_ON_ZONE     = 92,           // source = Map
                                                             // datalong = generic_script_id
                                                             // datalong2 = zone_id
+    SCRIPT_COMMAND_TAKE_MONEY               = 93,           // source = Player (from provided source or target)
+                                                            // datalong = copper amount
 
     SCRIPT_COMMAND_MAX,
 
@@ -1103,6 +1105,11 @@ struct ScriptInfo
             uint32 zoneId;                                  // datalong2
         } startScriptOnZone;
 
+        struct                                              // SCRIPT_COMMAND_TAKE_MONEY (93)
+        {
+            uint32 amount;                                  // datalong
+        } takeMoney;
+
         struct
         {
             uint32 data[9];
@@ -1391,6 +1398,7 @@ struct SpellScript
     virtual void OnSuccessfulStart(Spell* /*spell*/) const {}
     virtual void OnSuccessfulFinish(Spell* /*spell*/) const {}
     virtual void OnFinish(Spell* /*spell*/, bool /*ok*/) const {}
+    virtual void OnComboPointsSpent(Spell* /*spell*/, uint8 /*comboPoints*/) const {}
     virtual SpellCastResult OnCheckCast(Spell* /*spell*/, bool /*strict*/) const { return SPELL_CAST_OK; }
     virtual bool OnCanCastNonCombatSpellInCombat(Spell* /*spell*/) const { return false; }
     virtual std::optional<uint32> OnCalculatePowerCost(SpellEntry const* /*spellInfo*/, Unit* /*caster*/, Spell* /*spell*/, Item* /*castItem*/) const { return std::nullopt; }
@@ -1410,6 +1418,7 @@ struct SpellScript
     virtual void OnPrepareProcFlags(Spell* /*spell*/, bool& /*canTrigger*/, uint32& /*procAttacker*/, uint32& /*procVictim*/) const {}
     virtual void OnBeforeProc(Spell* /*spell*/, Unit* /*target*/, SpellMissInfo /*missInfo*/, uint32& /*procAttacker*/, uint32& /*procVictim*/, uint32& /*procEx*/, bool& /*triggerWeaponProcs*/) const {}
     virtual void OnHit(Spell* /*spell*/, SpellMissInfo /*missInfo*/) const {}
+    virtual void OnAfterHeal(Spell* /*spell*/, Unit* /*target*/, uint32 /*heal*/, int32 /*gain*/, bool /*crit*/) const {}
     virtual void OnAfterHit(Spell* /*spell*/) const {}
     virtual bool OnSendLoot(Spell* /*spell*/, GameObject* /*target*/, uint32 /*lootType*/, LockType /*lockType*/) const { return false; }
     virtual void OnSummonBeforeAdd(Spell* /*spell*/, Pet* /*summon*/, uint32 /*summonIndex*/) const {}
@@ -1430,7 +1439,9 @@ struct AuraScript
     virtual int32 OnDurationCalculate(WorldObject const* /*caster*/, Unit const* /*target*/, int32 duration) { return duration; }
     virtual void OnBeforeApply(Aura* /*aura*/, bool /*apply*/) {}
     virtual void OnAfterApply(Aura* /*aura*/, bool /*apply*/) {}
+    virtual void OnCharmStateChanged(Aura* /*aura*/, Unit* /*caster*/, Unit* /*target*/, bool /*apply*/) {}
     virtual void OnAfterShapeshift(Aura* /*aura*/, ShapeshiftForm /*oldForm*/, ShapeshiftForm /*newForm*/) {}
+    virtual void OnCastSpeedChanged(Aura* /*aura*/) {}
     virtual void OnDispel(SpellAuraHolder* /*holder*/, Unit* /*target*/, Spell* /*dispelSpell*/, uint32 /*dispelCount*/) {}
     virtual std::optional<SpellProcEventTriggerCheck> OnCheckProc(Unit const* /*owner*/, Unit* /*victim*/, SpellAuraHolder* /*holder*/, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 /*procExtra*/, WeaponAttackType /*attType*/, bool /*isVictim*/) { return std::nullopt; }
     virtual std::optional<SpellAuraProcResult> OnProc(Unit* /*owner*/, Unit* /*victim*/, uint32 /*amount*/, int32 /*originalAmount*/, Aura* /*triggeredByAura*/, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 /*procEx*/, uint32 /*cooldown*/) { return std::nullopt; }
